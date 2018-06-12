@@ -40,3 +40,12 @@ Docker login
     ok: [docker.iomate.local]
     PLAY RECAP *************************************************************************************************************
     docker.iomate.local        : ok=3    changed=1    unreachable=0    failed=0
+
+#### Docker Container and Image
+
+Ansible provides docker_image module to deal with Docker images and docker_container module to execute docker commands on the container. It allows us to perform basic operations such as start and stop container, removing container, as well as more complex task such as network set up, CPU/memory/storage allocation. This is a first baby step to play with image and container via the modules.
+
+  - Create docker_container_image.yml
+  - Make sure it works by running command 
+    
+        $ansible-playbook docker_container_image.yml
