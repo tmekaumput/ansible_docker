@@ -20,3 +20,23 @@ These following variables also added to group_vars/all for docker login command.
   - docker_hub_user
   - docker_hub_password
   - docker_hub_email
+  
+Docker login
+
+  - Creating docker_login.yml
+  - Make sure it works by running command 
+    
+    $ansible-playbook docker_login.yml
+    
+  - Happy with the result below
+
+
+    PLAY [docker.iomate.local] *********************************************************************************************
+    TASK [Gathering Facts] *************************************************************************************************
+    ok: [docker.iomate.local]
+    TASK [Login to DockerHub] **********************************************************************************************
+    changed: [docker.iomate.local]
+    TASK [Logout from DockerHub] *******************************************************************************************
+    ok: [docker.iomate.local]
+    PLAY RECAP *************************************************************************************************************
+    docker.iomate.local        : ok=3    changed=1    unreachable=0    failed=0
