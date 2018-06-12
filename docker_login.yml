@@ -1,0 +1,17 @@
+---
+- hosts: docker.iomate.local
+  tasks:
+
+    - name: Login to DockerHub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+        email: "{{ docker_hub_email }}"
+        state: present
+
+    - name: Logout from DockerHub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+        email: "{{ docker_hub_email }}"
+        state: absent
