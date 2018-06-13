@@ -52,3 +52,12 @@ Ansible provides docker_image module to deal with Docker images and docker_conta
 There you go!!! The docker_network module accommodates Docker network configuration. It supports custom networks as you would often need to set up containers in multiple zones such as proxy frontend, application server, and backend data tier, and more. 
 
     $ansible-playbook docker_network.yml
+
+### Ansible + Docker Volume
+
+In real world, applications are often redeployed with changes, and fixes without need to refresh persistent data.
+Developer may just want to refresh new version of the application with minor change, or tester will need to get updated version of the application deployed to run test on existing test data already pre-loaded. 
+The docker_container module supports volumes parameter to allow Docker to control and manage volumes of the container.
+It also comes with docker_volume module to manage volumes specifically.
+
+    $ansible-playbook docker_volume.yml
