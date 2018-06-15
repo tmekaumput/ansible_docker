@@ -61,3 +61,20 @@ The docker_container module supports volumes parameter to allow Docker to contro
 It also comes with docker_volume module to manage volumes specifically.
 
     $ansible-playbook docker_volume.yml
+
+### Ansible + Docker Compose
+
+Fundamentally Docker Compose is a blueprint yaml file that feeds into docker-compose binary that talks to Docker API to manage images and containers defined in the compose file, so we have to have the Docker Daemon running.
+Ansible got this covered by using docker_service module, unfortunately the module supports compose file upto version 2 only as per statement in the document.
+
+The module supports external compose file using **project_src** or using **definition** for an embed docker compose content in Ansible playbook.
+
+**NOTE**: It requires docker-compose python library, getting it installed with the command below
+
+    pip install docker-compose
+
+**NOTE**: It may require to remove docker-py module depends on initial setup of the host that runs docker. Remove both docker and docker-py, then re-install only docker module will solve the problem.
+
+    pip uninstall docker-py
+    pip uninstall docker
+    pip install docker
