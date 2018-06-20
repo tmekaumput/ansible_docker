@@ -1,0 +1,61 @@
+---
+- hosts: docker.iomate.local
+  tasks:
+
+    - name: Create a backend network
+      docker_network:
+        name: backend_network
+        state: present
+        
+    - name: Login to DockerHub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+        email: "{{ docker_hub_email }}"
+        state: present
+        
+      
+    - name: Start mysql instance
+      docker_container:
+        name: mysql_inst_1
+        image: mysql:5.7.22
+        state: started
+        hostname: mysql_inst_1
+        networks:
+          - name: backend_network
+        volumes:
+          - mysql_data:/var/lib/mysql
+        detach: True
+        
+    - name: Get volume detail
+      docker_volume:
+        name: mysql_data
+      register: mysql_data_volume_result
+      
+    - name: Display
+      debug:
+        msg: "{{ mysql_data_volume_result }}"
+          
+    - name: Stop mysql instance
+      docker_container:
+        name: mysql_inst_1
+        image: mysql:5.7.22
+        state: stopped
+        
+    - name: Remove mysql instance
+      docker_container:
+        name: mysql_inst_1
+        image: mysql:5.7.22
+        state: absent
+        
+    - name: Remove mysql image
+      docker_image:
+        name: mysql
+        tag: 5.7.22
+        
+    
+    - name: Remove backend network
+      docker_network:
+        name: backend_network
+        state: absent
+        

@@ -1,0 +1,86 @@
+---
+- hosts: docker.iomate.local
+  tasks:
+
+    - name: Create a frontend network
+      docker_network:
+        name: frontend_network
+        state: present
+        
+    - name: Create a backend network
+      docker_network:
+        name: backend_network
+        state: present
+        
+    - name: Login to DockerHub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+        email: "{{ docker_hub_email }}"
+        state: present
+        
+    - name: Start glassfish instance
+      docker_container:
+        name: glassfish_inst_1
+        image: oracle/glassfish:4.1.2
+        state: started
+        hostname: glassfish_inst_1
+        networks:
+          - name: frontend_network
+          - name: backend_network
+        detach: True
+        
+    - name: Start mysql instance
+      docker_container:
+        name: mysql_inst_1
+        image: mysql:5.7.22
+        state: started
+        hostname: mysql_inst_1
+        networks:
+          - name: backend_network
+        detach: True
+          
+    - name: Stop glassfish instance
+      docker_container:
+        name: glassfish_inst_1
+        image: oracle/glassfish:4.1.2
+        state: stopped
+        
+    - name: Stop mysql instance
+      docker_container:
+        name: mysql_inst_1
+        image: mysql:5.7.22
+        state: stopped
+        
+    - name: Remove glassfish instance
+      docker_container:
+        name: glassfish_inst_1
+        image: oracle/glassfish:4.1.2
+        state: absent
+        
+    - name: Remove mysql instance
+      docker_container:
+        name: mysql_inst_1
+        image: mysql:5.7.22
+        state: absent
+        
+    - name: Remove glassfish image
+      docker_image:
+        name: oracle/glassfish
+        tag: 4.1.2
+
+    - name: Remove mysql image
+      docker_image:
+        name: mysql
+        tag: 5.7.22
+        
+    - name: Remove frontend network
+      docker_network:
+        name: frontend_network
+        state: absent
+        
+    - name: Remove backend network
+      docker_network:
+        name: backend_network
+        state: absent
+        

@@ -1,0 +1,49 @@
+---
+- hosts: docker.iomate.local
+  tasks:
+
+    - name: Login to DockerHub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+        email: "{{ docker_hub_email }}"
+        state: present
+
+    - name: pull an image
+      docker_image:
+        name: centos
+        tag: 7.3.1611
+
+    - name: Start an instance
+      docker_container:
+        name: instance_1
+        image: centos:7.3.1611
+        state: started
+        hostname: instance_1
+        network_mode: bridge
+        detach: true
+
+    - name: Stop an instance
+      docker_container:
+        name: instance_1
+        state: stopped
+        hostname: instance_1
+
+    - name: Remove an instance
+      docker_container:
+        name: instance_1
+        state: absent
+        hostname: instance_1
+
+    - name: Remove image
+      docker_image:
+        state: absent
+        name: centos
+        tag: 7.3.1611
+        
+    - name: Logout from DockerHub
+      docker_login:
+        username: "{{ docker_hub_user }}"
+        password: "{{ docker_hub_password }}"
+        email: "{{ docker_hub_email }}"
+        state: absent
